@@ -1,24 +1,25 @@
 ﻿using System;
 
-class LetterAnalyzer
+public class LetterAnalyzer
 {
     public static int CountAdjacentDuplicates(string text)
     {
         if (string.IsNullOrWhiteSpace(text))
             return 0;
 
-        text = text.Replace(" ", ""); // Убираем пробелы
+        char[] chars = text.Replace(" ", "").ToCharArray(); // Убираем пробелы
 
         int count = 0;
-        for (int i = 1; i < text.Length; i++)
+        for (int i = 1; i < chars.Length; i++)
         {
-            if (text[i] == text[i - 1])
+            if (chars[i] == chars[i - 1])
                 count++;
         }
 
         return count;
     }
 }
+
 
 class Program
 {
