@@ -1,34 +1,58 @@
 ﻿using System;
 
-public class LetterAnalyzer
+namespace TestProject1
 {
-    public static int CountAdjacentDuplicates(string text)
+    // Класс для решения задачи
+    public class LetterCounter
     {
-        if (string.IsNullOrWhiteSpace(text))
-            return 0;
-
-        char[] chars = text.Replace(" ", "").ToCharArray(); // Убираем пробелы
-
-        int count = 0;
-        for (int i = 1; i < chars.Length; i++)
+        // Функция для подсчета одинаковых соседних букв
+        public int CountAdjacentLetters(string input)
         {
-            if (chars[i] == chars[i - 1])
-                count++;
+            int count = 0;
+            input = input.Replace(" ", "").ToLower(); // Преобразуем строку
+
+            for (int i = 0; i < input.Length - 1; i++)
+            {
+                if (input[i] == input[i + 1])
+                {
+                    int length = 2; // Начинаем с двух одинаковых символов
+
+                    // Считаем длину последовательности одинаковых символов
+                    while (i + length < input.Length && input[i] == input[i + length])
+                    {
+                        length++;
+                    }
+
+                    count += length; // Добавляем количество одинаковых букв
+                    i += length - 1; // Переходим к следующей букве после группы одинаковых
+                }
+            }
+            return count;
         }
-
-        return count;
     }
-}
 
-
-class Program
-{
-    static void Main()
+    // Основной класс для вывода
+    class Program
     {
-        Console.Write("Введите предложение: ");
-        string input = Console.ReadLine();
+        static void Main()
+        {
+            // Получаем ввод от пользователя
+            Console.WriteLine("Введите предложение:");
+            string input = Console.ReadLine();
 
-        int result = LetterAnalyzer.CountAdjacentDuplicates(input);
-        Console.WriteLine($"Количество одинаковых соседних букв: {result}");
+            // Если строка пустая, сразу выводим 0 и завершаем
+            if (string.IsNullOrEmpty(input))
+            {
+                Console.WriteLine("Количество одинаковых соседних букв: 0");
+                return;
+            }
+
+            // Создаем объект для подсчета
+            var counter = new LetterCounter();
+            int count = counter.CountAdjacentLetters(input);
+
+            // Выводим результат
+            Console.WriteLine("Количество одинаковых соседних букв: " + count);
+        }
     }
 }
