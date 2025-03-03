@@ -1,58 +1,58 @@
-﻿using System;
-
-namespace TestProject1
+﻿namespace TestProject1 // Определение пространства имен, в котором будет находиться класс.
 {
-    // Класс для решения задачи
-    public class LetterCounter
+    public class LetterCounter // Определение публичного класса LetterCounter, который будет выполнять подсчёт одинаковых соседних букв в строках.
     {
-        // Функция для подсчета одинаковых соседних букв
-        public int CountAdjacentLetters(string input)
+        // Метод для подсчета одинаковых соседних букв в строке
+        public Dictionary<char, List<int>> CountAdjacentLetters(string input) // Метод, принимающий строку и возвращающий словарь, где ключ — символ, а значение — список длин последовательных одинаковых букв.
         {
-            int count = 0;
-            input = input.Replace(" ", "").ToLower(); // Преобразуем строку
+            var letterCounts = new Dictionary<char, List<int>>(); // Создание нового словаря для хранения букв и списков длин последовательностей.
+            input = input.Replace(" ", "").ToLower(); // Удаление пробелов из строки и приведение её к нижнему регистру для унификации.
 
-            for (int i = 0; i < input.Length - 1; i++)
+            for (int i = 0; i < input.Length - 1; i++) // Цикл по строке до предпоследнего символа.
             {
-                if (input[i] == input[i + 1])
+                if (input[i] == input[i + 1]) // Проверка, одинаковые ли текущий символ и следующий.
                 {
-                    int length = 2; // Начинаем с двух одинаковых символов
+                    int length = 2; // Если одинаковые, начинаем считать длину последовательности (минимум 2, так как уже нашли пару).
+                    while (i + length < input.Length && input[i] == input[i + length]) // Пока символы одинаковые и не вышли за пределы строки.
+                        length++; // Увеличиваем длину последовательности.
 
-                    // Считаем длину последовательности одинаковых символов
-                    while (i + length < input.Length && input[i] == input[i + length])
-                    {
-                        length++;
-                    }
+                    if (!letterCounts.ContainsKey(input[i])) // Если такой буквы еще нет в словаре.
+                        letterCounts[input[i]] = new List<int>(); // Добавляем её в словарь с пустым списком.
 
-                    count += length; // Добавляем количество одинаковых букв
-                    i += length - 1; // Переходим к следующей букве после группы одинаковых
+                    letterCounts[input[i]].Add(length); // Добавляем длину найденной последовательности в список для текущей буквы.
+                    i += length - 1; // Пропускаем все уже подсчитанные символы, сдвигая индекс.
                 }
             }
-            return count;
+
+            return letterCounts; // Возвращаем результат: словарь с буквами и списками длин последовательностей.
         }
     }
 
-    // Основной класс для вывода
-    class Program
+    class Program // Класс программы, в котором содержится точка входа.
     {
-        static void Main()
+        static void Main() // Главный метод программы, который запускается при старте приложения.
         {
-            // Получаем ввод от пользователя
-            Console.WriteLine("Введите предложение:");
-            string input = Console.ReadLine();
+            Console.WriteLine("Введите предложение:"); // Просим пользователя ввести строку.
+            string input = Console.ReadLine(); // Чтение строки, введенной пользователем.
 
-            // Если строка пустая, сразу выводим 0 и завершаем
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(input)) // Проверка, если строка пуста или равна null.
             {
-                Console.WriteLine("Количество одинаковых соседних букв: 0");
-                return;
+                Console.WriteLine("Нет одинаковых соседних букв."); // Сообщаем, что нет одинаковых соседних букв.
+                return; // Выход из метода, если строка пустая.
             }
 
-            // Создаем объект для подсчета
-            var counter = new LetterCounter();
-            int count = counter.CountAdjacentLetters(input);
+            var letterCounts = new LetterCounter().CountAdjacentLetters(input); // Вызов метода CountAdjacentLetters для подсчета одинаковых соседних букв.
 
-            // Выводим результат
-            Console.WriteLine("Количество одинаковых соседних букв: " + count);
+            if (letterCounts.Count == 0) // Если в словаре нет элементов (то есть одинаковых соседних букв не найдено).
+            {
+                Console.WriteLine("Нет одинаковых соседних букв."); // Сообщаем, что одинаковых соседних букв нет.
+            }
+            else
+            {
+                foreach (var pair in letterCounts) // Проходим по всем парам в словаре.
+                    foreach (var length in pair.Value) // Проходим по всем длинам последовательностей для каждой буквы.
+                        Console.WriteLine($"{pair.Key} - {length} раза"); // Выводим букву и количество раз, сколько она встретилась подряд.
+            }
         }
     }
 }
