@@ -1,12 +1,15 @@
-﻿namespace TestProject1 // Определение пространства имен, в котором будет находиться класс.
+﻿//Дано предложение. Определить, сколько в нем одинаковых соседних букв. Пробелы не учитывать.
+
+
+namespace TestProject1 
 {
-    public class LetterCounter // Определение публичного класса LetterCounter, который будет выполнять подсчёт одинаковых соседних букв в строках.
+    public class LetterCounter 
     {
-        // Метод для подсчета одинаковых соседних букв в строке
-        public Dictionary<char, List<int>> CountAdjacentLetters(string input) // Метод, принимающий строку и возвращающий словарь, где ключ — символ, а значение — список длин последовательных одинаковых букв.
+        
+        public Dictionary<char, List<int>> CountAdjacentLetters(string input) 
         {
             var letterCounts = new Dictionary<char, List<int>>(); // Создание нового словаря для хранения букв и списков длин последовательностей.
-            input = input.Replace(" ", "").ToLower(); // Удаление пробелов из строки и приведение её к нижнему регистру для унификации.
+            input = input.Replace(" ", "").ToLower(); 
 
             for (int i = 0; i < input.Length - 1; i++) // Цикл по строке до предпоследнего символа.
             {
@@ -24,16 +27,16 @@
                 }
             }
 
-            return letterCounts; // Возвращаем результат: словарь с буквами и списками длин последовательностей.
+            return letterCounts; 
         }
     }
 
-    class Program // Класс программы, в котором содержится точка входа.
+    class Program 
     {
-        static void Main() // Главный метод программы, который запускается при старте приложения.
+        static void Main() 
         {
-            Console.WriteLine("Введите предложение:"); // Просим пользователя ввести строку.
-            string input = Console.ReadLine(); // Чтение строки, введенной пользователем.
+            Console.WriteLine("Введите предложение:"); 
+            string input = Console.ReadLine(); 
 
             if (string.IsNullOrEmpty(input)) // Проверка, если строка пуста или равна null.
             {
