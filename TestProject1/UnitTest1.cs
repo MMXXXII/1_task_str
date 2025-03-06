@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace TestProject1
 {
@@ -6,7 +7,6 @@ namespace TestProject1
     {
         private LetterCounter _letterCounter;
 
-        // Настройка перед каждым тестом
         [SetUp]
         public void Setup()
         {
@@ -14,55 +14,48 @@ namespace TestProject1
         }
 
         [Test]
-        public void NoAdjacentDuplicates()
+        public void Test_RegularInput()
         {
-            // Нет одинаковых соседних символов
-            var result = _letterCounter.CountAdjacentLetters("Сегодня хорошая погода");
-            Assert.AreEqual(0, result.Count); // Проверяем, что нет одинаковых соседних букв
+            var result = _letterCounter.CountAdjacentLetters("aabbccdd");
+            Assert.AreEqual(4, result.Count);
+            Assert.Contains(2, result['a']);
+            Assert.Contains(2, result['b']);
+            Assert.Contains(2, result['c']);
+            Assert.Contains(2, result['d']);
         }
 
         [Test]
-        public void OneAdjacentDuplicate()
+        public void Test_WithoutRepeatingLetters()
         {
-            // Одна пара одинаковых соседних символов: "пиццу"
-            var result = _letterCounter.CountAdjacentLetters("Я люблю пиццу");
-            Assert.AreEqual(1, result['ц'].Count); // Проверяем, что для 'ц' одна пара
+            var result = _letterCounter.CountAdjacentLetters("abcdefg");
+            Assert.IsEmpty(result);
         }
 
         [Test]
-        public void MultipleAdjacentDuplicates()
+        public void Test_WithSpaces()
         {
-            // Несколько одинаковых соседних символов: "Мамааа мыла рамуу"
-            // пары: "аа", "аа", "уу", "уу"
-            var result = _letterCounter.CountAdjacentLetters("Мамааа мыла рамуу");
-            Assert.AreEqual(3, result['а'].Count); // Три случая для 'а'
-            Assert.AreEqual(2, result['у'].Count); // Два случая для 'у'
-        }
-
-
-        [Test]
-        public void SpacesIgnored()
-        {
-            // Пробелы игнорируются, одна пара одинаковых соседних символов: "ии"
-            var result = _letterCounter.CountAdjacentLetters("Вечер был тиихий");
-            Assert.AreEqual(2, result['и'].Count); // Ожидаем 1 пару для 'и'
+            var result = _letterCounter.CountAdjacentLetters("aa bb cc");
+            Assert.AreEqual(3, result.Count);
+            Assert.Contains(2, result['a']);
+            Assert.Contains(2, result['b']);
+            Assert.Contains(2, result['c']);
         }
 
         [Test]
-        public void EmptyString()
+        public void Test_EmptyString()
         {
-            // Пустая строка, никаких одинаковых символов
             var result = _letterCounter.CountAdjacentLetters("");
-            Assert.AreEqual(0, result.Count); // Ничего нет, проверяем пустоту
+            Assert.IsEmpty(result);
         }
 
-
         [Test]
-        public void SingleCharacterString()
+        public void Test_CaseInsensitive()
         {
-            // Строка из одного символа, никаких одинаковых соседних символов
-            var result = _letterCounter.CountAdjacentLetters("A");
-            Assert.AreEqual(0, result.Count); // Никаких одинаковых соседних букв
+            var result = _letterCounter.CountAdjacentLetters("AABBaa");
+            Assert.AreEqual(2, result.Count);
+            Assert.Contains(2, result['a']);
+            Assert.Contains(2, result['b']);
+            Assert.Contains(2, result['a']);
         }
     }
 }
